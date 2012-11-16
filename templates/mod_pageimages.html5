@@ -1,0 +1,4 @@
+<?php if ($this->has_pageimage): ?>
+<?php echo($this->pageimage);?>
+<?php endif; ?>
+

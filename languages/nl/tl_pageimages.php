@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * Contao Open Source CMS
+ * Copyright (C) 2005-2010 Leo Feyer
+ * 
+ * @package		PageImages
+ * @author		Ruud Walraven <ruud.walraven@gmail.com>
+ * @copyright	Ruud Walraven 2011 - 2012
+ * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ */
+
+$GLOBALS['TL_LANG']['tl_pageimages']['name'] = array('Naam categorie', 'Naam voor de categorie.');
+$GLOBALS['TL_LANG']['tl_pageimages']['size'] = array('Afbeeldingsbreedte en -hoogte', 'Hier kunt u de afbeelding formaten en schalingsmethode instellen.');
+$GLOBALS['TL_LANG']['tl_pageimages']['alt'] = array('Alternatieve tekst', 'Om afbeeldingen en filmpjes toegankelijk voor iedereen te maken, plaatst u best een alternatieve tekst met een korte omschrijving van hun inhoud.');
+$GLOBALS['TL_LANG']['tl_pageimages']['multiSRC'] = array('Standaard afbeelding', 'Selecteer een of meerdere afbeeldingen of mappen (afbeeldingen in een map worden automatisch geselecteerd). Als meerdere afbeeldingen worden geselecteerd, dan word steeds willekeurig één afbeelding gekozen.');
+
+$GLOBALS['TL_LANG']['tl_pageimages']['new'] = array('Nieuwe pagina afbeelding categorie', 'Nieuwe pagina afbeelding categorie.');
+$GLOBALS['TL_LANG']['tl_pageimages']['settings'] = array('Instellingen', 'Instellingen.');
+$GLOBALS['TL_LANG']['tl_pageimages']['edit'] = array('Pagina afbeelding categorie aanpassen', 'Pagina afbeelding categorie aanpassen.');
+$GLOBALS['TL_LANG']['tl_pageimages']['copy'] = array('Pagina afbeelding categorie kopiëren', 'Pagina afbeelding categorie kopiëren.');
+$GLOBALS['TL_LANG']['tl_pageimages']['delete'] = array('Pagina afbeelding categorie verwijderen', 'Pagina afbeelding categorie verwijderen.');
+$GLOBALS['TL_LANG']['tl_pageimages']['show'] = array('Toon de pagina afbeelding categorie details', 'Toon de pagina afbeelding categorie details.');

@@ -1,0 +1,10 @@
+<figure class="image_container flash"<?php if ($this->margin): ?> style="<?php echo $this->margin; ?>"<?php endif; ?>>
+<embed src="<?php echo $this->src; ?>" height="<?php echo $this->arrSize[1]; ?>" scale="ExactFit" width="<?php echo $this->arrSize[0]; ?>" type="application/x-shockwave-flash" allowscriptaccess="sameDomain" bgcolor="#ffffff" pluginspage="http://www.macromedia.com/go/getflashplayer">
+<?php if ($this->caption): ?>
+<figcaption class="caption"><?php echo $this->caption; ?></figcaption>
+<?php endif; ?>
+</figure>
+
+
+
+ 
