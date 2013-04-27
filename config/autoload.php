@@ -2,9 +2,9 @@
 
 /**
  * Contao Open Source CMS
- * 
+ *
  * Copyright (c) 2005-2013 Leo Feyer
- * 
+ *
  * @package Pageimages
  * @link    https://contao.org
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
@@ -45,5 +45,5 @@ TemplateLoader::addFiles(array
 	'mod_pageimages'     => 'system/modules/pageimages/templates',
 	'pageimagesflash'    => 'system/modules/pageimages/templates',
 	'pageimagesimage'    => 'system/modules/pageimages/templates',
-	'pageimages_default'               => 'system/modules/pageimages/templates',
+	'pageimages_default' => 'system/modules/pageimages/templates',
 ));

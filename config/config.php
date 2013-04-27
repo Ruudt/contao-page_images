@@ -43,7 +43,7 @@ array_insert($GLOBALS['FE_MOD']['miscellaneous'], 0, array
 $GLOBALS['BE_MOD']['content']['pageimages'] = array
 (
 	'tables'	=> array('tl_pageimages','tl_pageimages_items'),
-	'icon'		=> 'system/modules/pageimages/html/icon.gif'
+	'icon'		=> 'system/modules/pageimages/assets/icon.gif'
 );
 
 /**
