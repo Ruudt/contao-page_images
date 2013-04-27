@@ -14,7 +14,7 @@
 /**
  * Palettes
  */
-$GLOBALS['TL_DCA']['tl_user_group']['palettes']['default'] = str_replace('{alexf_legend}', '{pageimages_legend},pageimages_categories,pageimages_categoriesp;{alexf_legend}', $GLOBALS['TL_DCA']['tl_user_group']['palettes']['default']);
+$GLOBALS['TL_DCA']['tl_user_group']['palettes']['default'] = preg_replace('/({alexf_legend(:hide)?})/', '{pageimages_legend},pageimages_categories,pageimages_categoriesp;\1', $GLOBALS['TL_DCA']['tl_user_group']['palettes']['default']);
 
 
 /**
