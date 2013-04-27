@@ -14,7 +14,7 @@
 /**
  * Run in a custom namespace, so the class can be replaced
  */
-namespace Contao;
+namespace PageImages;
 
 
 /**
@@ -44,29 +44,61 @@ class ModulePageImages extends \PageImages
 			return;
 		}
 
-		$pageImage = $this->getPageImage($objPage->id);
-
-		$this->Template->has_pageimage = count($pageImage) ? true : false;
-
-        // Set data to template
-		if ($this->Template->has_pageimage)
+		switch ($this->arrData['pageimages_type'])
 		{
-			$objTemplate = new \FrontendTemplate($this->pageimages_layout);
+			case 'all':
+				$pageImages = $this->getPageImages($objPage->id, $this->arrData['pageimages_type']);
 
-			// Adds variables to the main template.
-			// Note: These variables are not used by the default templates,		
-			//       but custom templates can use them.
-			$this->addImageToTemplate($objTemplate, $pageImage);
-				
-			$objTemplate->headline = $this->Template->headline;
-			$objTemplate->hl = $this->Template->hl;
-			$objTemplate->pageimage = $this->getImageHTML($pageImage);
-			$objTemplate->style = count($this->Template->style) ? implode(' ', $this->Template->arrStyle) : '';
-			$objTemplate->cssID = strlen($this->Template->cssID[0]) ? ' id="' . $this->cssID[0] . '"' : '';
-			$objTemplate->class = trim('ce_' . $this->Template->type . ' ' . $this->Template->cssID[1]);
-			$objTemplate->imageData = $pageImage['data']; // Thanks to JSk
+				$this->Template->has_pageimage = count($pageImages) && true;
+				if ($this->Template->has_pageimage)
+				{
+					$objTemplate = new \FrontendTemplate($this->pageimages_layout);
 
-			$this->Template->pageimage = $objTemplate->parse();
+					$strImages = '';
+					foreach ($pageImages as $img)
+					{
+						$strImages .= $this->getImageHTML($img);
+					}
+
+					$objTemplate->headline = $this->Template->headline;
+					$objTemplate->hl = $this->Template->hl;
+					$objTemplate->pageimages = $strImages;
+					$objTemplate->style = count($this->Template->style) ? implode(' ', $this->Template->arrStyle) : '';
+					$objTemplate->cssID = strlen($this->Template->cssID[0]) ? ' id="' . $this->cssID[0] . '"' : '';
+					$objTemplate->class = trim('ce_' . $this->Template->type . ' ' . $this->Template->cssID[1]);
+
+					$this->Template->pageimage = $objTemplate->parse();
+				}
+
+				break;
+
+			case 'random':
+			default:
+				$pageImage = $this->getPageImages($objPage->id, $this->arrData['pageimages_type']);
+
+				$this->Template->has_pageimage = count($pageImage) && true;		
+				if ($this->Template->has_pageimage)
+				{
+					$objTemplate = new \FrontendTemplate($this->pageimages_layout);
+
+					// Adds variables to the main template.
+					// Note: These variables are not used by the default templates,		
+					//       but custom templates can use them.
+					$this->addImageToTemplate($objTemplate, $pageImage);
+						
+					$objTemplate->headline = $this->Template->headline;
+					$objTemplate->hl = $this->Template->hl;
+					$objTemplate->pageimage = $this->getImageHTML($pageImage);
+					$objTemplate->style = count($this->Template->style) ? implode(' ', $this->Template->arrStyle) : '';
+					$objTemplate->cssID = strlen($this->Template->cssID[0]) ? ' id="' . $this->cssID[0] . '"' : '';
+					$objTemplate->class = trim('ce_' . $this->Template->type . ' ' . $this->Template->cssID[1]);
+					$objTemplate->imageData = $pageImage['data']; // Thanks to JSk
+
+					$this->Template->pageimage = $objTemplate->parse();
+					
+				}
+
+				break;
 		}
 
 		// HOOK: add custom logic

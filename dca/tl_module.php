@@ -36,7 +36,20 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['pageimages_layout'] = array
 	'exclude'					=> true,
 	'inputType'					=> 'select',
 	'options_callback'			=> array('tl_module_pageimages', 'getPageimagesTemplates'),
+	'eval'						=> array('tl_class'=>'w50'),
 	'sql'						=> "varchar(64) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['pageimages_type'] = array
+(
+	'label'						=> &$GLOBALS['TL_LANG']['tl_module']['pageimages_type'],
+	'default'					=> 'random',
+	'exclude'					=> true,
+	'inputType'					=> 'select',
+	'options'					=> array('random', 'all'),
+	'reference'					=> &$GLOBALS['TL_LANG']['tl_module']['pageimages_type_options'],
+	'eval'						=> array('tl_class'=>'w50'),
+	'sql'						=> "varchar(64) NOT NULL default 'random'"
 );
 
 

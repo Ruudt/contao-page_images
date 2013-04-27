@@ -3,12 +3,21 @@
 /**
  * Contao Open Source CMS
  * 
- * Copyright (C) 2005-2012 Leo Feyer
+ * Copyright (c) 2005-2013 Leo Feyer
  * 
  * @package Pageimages
- * @link    http://www.contao.org
+ * @link    https://contao.org
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
+
+
+/**
+ * Register the namespaces
+ */
+ClassLoader::addNamespaces(array
+(
+	'PageImages',
+));
 
 
 /**
@@ -17,14 +26,14 @@
 ClassLoader::addClasses(array
 (
 	// Classes
-	'Contao\\PageImages'           => 'system/modules/pageimages/classes/PageImages.php',
+	'PageImages\PageImages'           => 'system/modules/pageimages/classes/PageImages.php',
 
 	// Models
-	'Contao\\PageimagesModel'      => 'system/modules/pageimages/models/PageimagesModel.php',
-	'Contao\\PageimagesPagesModel' => 'system/modules/pageimages/models/PageimagesPagesModel.php',
+	'PageImages\PageimagesModel'      => 'system/modules/pageimages/models/PageimagesModel.php',
+	'PageImages\PageimagesPagesModel' => 'system/modules/pageimages/models/PageimagesPagesModel.php',
 
 	// Modules
-	'Contao\\ModulePageImages'     => 'system/modules/pageimages/modules/ModulePageImages.php',
+	'PageImages\ModulePageImages'     => 'system/modules/pageimages/modules/ModulePageImages.php',
 ));
 
 
@@ -34,8 +43,7 @@ ClassLoader::addClasses(array
 TemplateLoader::addFiles(array
 (
 	'mod_pageimages'     => 'system/modules/pageimages/templates',
-	'nav_defaultdddd'    => 'system/modules/pageimages/templates',
-	'pageimages_default' => 'system/modules/pageimages/templates',
 	'pageimagesflash'    => 'system/modules/pageimages/templates',
 	'pageimagesimage'    => 'system/modules/pageimages/templates',
+	'pageimages_default'               => 'system/modules/pageimages/templates',
 ));

@@ -14,7 +14,7 @@
 /**
  * Run in a custom namespace, so the class can be replaced
  */
-namespace Contao;
+namespace PageImages;
 
 
 /**
@@ -26,7 +26,7 @@ namespace Contao;
 abstract class PageImages extends \Module
 {
 	/**
-	 * 
+	 * Generate the module
 	 * @param boolean
 	 * @return string
 	 */
@@ -38,17 +38,29 @@ abstract class PageImages extends \Module
 		return parent::generate();
 	}
 
-
     /**
-     * Generate module
+     * Get the page image(s)
      */
-    protected function getPageImage($pageId)
+    protected function getPageImages($pageId, $mode='')
 	{
 		// Retrieve images, looking up the ancestors and linking that to the pageimages_items
-		if ($pageImage = $this->findPageImage($pageId))
+		if ($pageImages = $this->findPageImages($pageId))
 		{
-			$pageImage['size'] = $this->objSet->size;
-			return $pageImage;
+			switch ($mode)
+			{
+				case 'all':
+					foreach ($pageImages as $key => $pageImage)
+					{
+						$pageImages[$key]['size'] = $this->objSet->size;
+					}
+					return $pageImages;
+				
+				case 'random':
+				default:
+					$pageImage = $pageImages[mt_rand(0, (count($pageImages)-1))];
+					$pageImage['size'] = $this->objSet->size;
+					return $pageImage;
+			}
 		}
 		else
 		{
@@ -57,12 +69,12 @@ abstract class PageImages extends \Module
 		}
 	}
 
-
 	/**
 	 * Check the parent pages recursively to find a page that has an image set
 	 * and then return that page. Returns false if none found.
+	 * TODO: Check navigation extension to sort out returning multiple images
 	 */
-	protected function findPageImage($pageId, $inheriting=false)
+	protected function findPageImages($pageId, $inheriting=false)
 	{
 		$objPageItem = \PageimagesPagesModel::findParentAndItemsById($pageId, $this->pageimages);
 
@@ -74,176 +86,63 @@ abstract class PageImages extends \Module
 
 				// Get a random image
 				$multiSRC = deserialize($objPageItem->multiSRC);
+				
 				if (is_array($multiSRC) && count($multiSRC))
 				{
-					if ($pageImage = $this->getRandomImage($multiSRC))
+					if ($pageImages = $this->getImages($multiSRC))
 					{
-						$pageImage['multiSRC']		= $multiSRC;
-						$pageImage['pageId']		= $objPageItem->pageId;
-						$pageImage['noInheritance']	= $objPageItem->noInheritance;
-						$pageImage['alt']			= $objPageItem->alt ? $objPageItem->alt : $pageImage['alt'];
-						$pageImage['data']			= $objPageItem->row(); // Thanks to JSk
+						foreach ($pageImages as $key => $pageImage)
+						{
+							$pageImages[$key]['multiSRC']		= $multiSRC;
+							$pageImages[$key]['pageId']			= $objPageItem->pageId;
+							$pageImages[$key]['noInheritance']	= $objPageItem->noInheritance;
+							$pageImages[$key]['alt']			= $objPageItem->alt ? $objPageItem->alt : $pageImages[$key]['alt'];
+							$pageImages[$key]['data']			= $objPageItem->row(); // Thanks to JSk
+						}
+						
 					}
 				}
 
-				if ($pageImage)
+				if ($pageImages)
 				{
 					// Return image when found
-					return $pageImage;
+					return $pageImages;
 				}
 			}
 		}
 		else
 		{
 			$objPage = \PageModel::findPublishedById($pageId);
-
+			
 			if ($objPage !== null && $objPage->pid)
 			{
 				// Continue searching while not at root
-				return $this->findPageImage($objPage->pid, true);
+				return $this->findPageImages($objPage->pid, true);
 			}
 		}
 
 		// Get the default image if no specific has been found
-		if ($pageImage = $this->getRandomImage($this->objSet->multiSRC))
+		if ($pageImages = $this->getImages($this->objSet->multiSRC))
 		{
-			$pageImage['multiSRC']		= $multiSRC;
-			$pageImage['pageId']		= 0;
-			$pageImage['noInheritance']	= 0;
-			$pageImage['alt']			= $this->objSet->alt ? $this->objSet->alt : $pageImage['alt'];
-			$pageImage['data']			= $this->objSet->row(); // Thanks to JSk
+			foreach ($pageImages as $key => $pageImage)
+			{
+				$pageImages[$key]['multiSRC']		= $multiSRC;
+				$pageImages[$key]['pageId']		= 0;
+				$pageImages[$key]['noInheritance']	= 0;
+				$pageImages[$key]['alt']			= $this->objSet->alt ? $this->objSet->alt : $pageImages[$key]['alt'];
+				$pageImages[$key]['data']			= $this->objSet->row(); // Thanks to JSk
+			}
+			
 		}
 
-		return $pageImage;
-	}
-
-
-	/**
-	 * Returns The image HTML
-	 * @param $img Image source
-	 * @param $width Image width
-	 * @param $height Image height
-	 * @return string
-	 */
-	protected function getImageHTML($arrItem)
-	{
-		if(substr($arrItem['singleSRC'], -3) == 'swf')
-		{
-			$objTemplate = new \FrontendTemplate('pageimagesflash');
-			$this->addImageToTemplate($objTemplate, $arrItem);
-			$this->setFlashSize($objTemplate, $arrItem);
-		}
-		else
-		{
-			$objTemplate = new \FrontendTemplate('pageimagesimage');
-			$this->addImageToTemplate($objTemplate, $arrItem);
-		}
-
-		return $objTemplate->parse();
-    }
-
-
-	/**
-	 * The addImageToTemplate function calls the getimage function that does not actually resize a flash file
-	 * This function calculates the resized size for the flash file
-	 */
-	protected function setFlashSize($objTemplate, $arrItem)
-	{
-		$size = deserialize($arrItem['size']);
-		$imgSize = getimagesize(TL_ROOT .'/'. $arrItem['singleSRC']);
-		$intMaxWidth = (TL_MODE == 'BE') ? 320 : $GLOBALS['TL_CONFIG']['maxImageWidth'];
-
-		// Adjust image size
-		if ($intMaxWidth > 0 && ($size[0] > $intMaxWidth || (!$size[0] && !$size[1] && $imgSize[0] > $intMaxWidth)))
-		{
-			$arrMargin = deserialize($arrItem['imagemargin']);
-
-			// Subtract margins
-			if (is_array($arrMargin) && $arrMargin['unit'] == 'px')
-			{
-				$intMaxWidth = $intMaxWidth - $arrMargin['left'] - $arrMargin['right'];
-			}
-
-			// See #2268 (thanks to Thyon)
-			$ratio = ($size[0] && $size[1]) ? $size[1] / $size[0] : $imgSize[1] / $imgSize[0];
-
-			$size[0] = $intMaxWidth;
-			$size[1] = floor($intMaxWidth * $ratio);
-		}
-
-		$width = $size[0];
-		$height = $size[1];
-		$mode = $size[2];
-	
-		// No resizing required
-		if ($imgSize[0] != $width || $imgSize[1] != $height)
-		{
-			$intPositionX = 0;
-			$intPositionY = 0;
-			$intWidth = $width;
-			$intHeight = $height;
-
-			// Mode-specific changes
-			if ($intWidth && $intHeight)
-			{
-				switch ($mode)
-				{
-					case 'proportional':
-						if ($imgSize[0] >= $imgSize[1])
-						{
-							unset($height, $intHeight);
-						}
-						else
-						{
-							unset($width, $intWidth);
-						}
-						break;
-
-					case 'box':
-						if (ceil($imgSize[1] * $width / $imgSize[0]) <= $intHeight)
-						{
-							unset($height, $intHeight);
-						}
-						else
-						{
-							unset($width, $intWidth);
-						}
-						break;
-				}
-			}
-
-			// Resize width and height and crop the image if necessary
-			if ($intWidth && $intHeight)
-			{
-				$intWidth = $width;
-				$intHeight = $height;
-			}
-			elseif ($intWidth)
-			{
-				$intHeight = ceil($imgSize[1] * $width / $imgSize[0]);
-			}
-			elseif ($intHeight)
-			{
-				$intWidth = ceil($imgSize[0] * $height / $imgSize[1]);
-			}
-		}		
-
-		$objTemplate->arrSize = array
-		(
-			0 => $intWidth,
-			1 => $intHeight,
-			2 => 12,
-			3 => 'width="'.$intWidth.'" height="'.$intHeight.'"',
-			'mime' => 'application/x-shockwave-flash'
-		);
-		$objTemplate->imgSize = $objTemplate->arrSize[3];
+		return $pageImages;
 	}
 	
 	/**
 	 * Returns a random existing image from the multiSRC
 	 * null if no existing image files in multiSRC
 	 */
-	protected function getRandomImage($multiSRC)
+	protected function getImages($multiSRC)
 	{
 		global $objPage;
 		$images = array();
@@ -362,6 +261,22 @@ abstract class PageImages extends \Module
 			return;
 		}
 
+		foreach ($images as $key => $arrImage)
+		{
+			$images[$key]['size'] = $this->imgSize;
+	
+			if (!$this->useCaption)
+			{
+				$images[$key]['caption'] = null;
+			}
+			elseif ($images[$key]['caption'] == '')
+			{
+				$images[$key]['caption'] = $images[$key]['title'];
+			}
+		}
+		
+		return $images;
+		
 		$i = mt_rand(0, (count($images)-1));
 
 		$arrImage = $images[$i];
@@ -377,5 +292,125 @@ abstract class PageImages extends \Module
 		}
 
 		return $arrImage;
+	}
+
+	/**
+	 * Returns The image HTML
+	 * @param $img Image source
+	 * @param $width Image width
+	 * @param $height Image height
+	 * @return string
+	 */
+	protected function getImageHTML($arrItem)
+	{
+		if(substr($arrItem['singleSRC'], -3) == 'swf')
+		{
+			$objTemplate = new \FrontendTemplate('pageimagesflash');
+			$this->addImageToTemplate($objTemplate, $arrItem);
+			$this->setFlashSize($objTemplate, $arrItem);
+		}
+		else
+		{
+			$objTemplate = new \FrontendTemplate('pageimagesimage');
+			$this->addImageToTemplate($objTemplate, $arrItem);
+		}
+
+		return $objTemplate->parse();
+    }
+
+	/**
+	 * The addImageToTemplate function calls the getimage function that does not actually resize a flash file
+	 * This function calculates the resized size for the flash file
+	 */
+	protected function setFlashSize($objTemplate, $arrItem)
+	{
+		$size = deserialize($arrItem['size']);
+		$imgSize = getimagesize(TL_ROOT .'/'. $arrItem['singleSRC']);
+		$intMaxWidth = (TL_MODE == 'BE') ? 320 : $GLOBALS['TL_CONFIG']['maxImageWidth'];
+
+		// Adjust image size
+		if ($intMaxWidth > 0 && ($size[0] > $intMaxWidth || (!$size[0] && !$size[1] && $imgSize[0] > $intMaxWidth)))
+		{
+			$arrMargin = deserialize($arrItem['imagemargin']);
+
+			// Subtract margins
+			if (is_array($arrMargin) && $arrMargin['unit'] == 'px')
+			{
+				$intMaxWidth = $intMaxWidth - $arrMargin['left'] - $arrMargin['right'];
+			}
+
+			// See #2268 (thanks to Thyon)
+			$ratio = ($size[0] && $size[1]) ? $size[1] / $size[0] : $imgSize[1] / $imgSize[0];
+
+			$size[0] = $intMaxWidth;
+			$size[1] = floor($intMaxWidth * $ratio);
+		}
+
+		$width = $size[0];
+		$height = $size[1];
+		$mode = $size[2];
+	
+		// No resizing required
+		if ($imgSize[0] != $width || $imgSize[1] != $height)
+		{
+			$intPositionX = 0;
+			$intPositionY = 0;
+			$intWidth = $width;
+			$intHeight = $height;
+
+			// Mode-specific changes
+			if ($intWidth && $intHeight)
+			{
+				switch ($mode)
+				{
+					case 'proportional':
+						if ($imgSize[0] >= $imgSize[1])
+						{
+							unset($height, $intHeight);
+						}
+						else
+						{
+							unset($width, $intWidth);
+						}
+						break;
+
+					case 'box':
+						if (ceil($imgSize[1] * $width / $imgSize[0]) <= $intHeight)
+						{
+							unset($height, $intHeight);
+						}
+						else
+						{
+							unset($width, $intWidth);
+						}
+						break;
+				}
+			}
+
+			// Resize width and height and crop the image if necessary
+			if ($intWidth && $intHeight)
+			{
+				$intWidth = $width;
+				$intHeight = $height;
+			}
+			elseif ($intWidth)
+			{
+				$intHeight = ceil($imgSize[1] * $width / $imgSize[0]);
+			}
+			elseif ($intHeight)
+			{
+				$intWidth = ceil($imgSize[0] * $height / $imgSize[1]);
+			}
+		}		
+
+		$objTemplate->arrSize = array
+		(
+			0 => $intWidth,
+			1 => $intHeight,
+			2 => 12,
+			3 => 'width="'.$intWidth.'" height="'.$intHeight.'"',
+			'mime' => 'application/x-shockwave-flash'
+		);
+		$objTemplate->imgSize = $objTemplate->arrSize[3];
 	}
 }

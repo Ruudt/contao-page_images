@@ -6,7 +6,11 @@
 <<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
 <?php endif; ?>
 
-<?php echo($this->pageimage); ?>
+<?php if ($this->pageimages): ?>
+<?php echo $this->pageimages; ?>
+<?php else: ?>
+<?php echo $this->pageimage; ?>
+<?php endif?>
 </div>
 
 <!-- indexer::continue -->

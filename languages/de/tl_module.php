@@ -11,4 +11,7 @@
  */
 
 $GLOBALS['TL_LANG']['tl_module']['pageimages'] = array('Seitenbilderkategorie', 'Bitte wählen Sie die Seitenbilderkategorie aus.');
-$GLOBALS['TL_LANG']['tl_module']['pageimages_layout'] = array('Page image template', 'Please choose a page image layout. You can add custom layouts to folder <em>templates</em>. Template files start with <em>pageimages_</em> and require file extension <em>.tpl</em>.');
+$GLOBALS['TL_LANG']['tl_module']['pageimages_layout'] = array('Seitenbilder template', 'Please choose a page image layout. You can add custom layouts to folder <em>templates</em>. Template files start with <em>pageimages_</em> and require file extension <em>.tpl</em>.');
+$GLOBALS['TL_LANG']['tl_module']['pageimages_type'] = array('Seitenbilder Typ','Wie sollen die Bilder ausgelesen werden?');
+$GLOBALS['TL_LANG']['tl_module']['pageimages_type_options']['all'] = 'Alle Bilder';
+$GLOBALS['TL_LANG']['tl_module']['pageimages_type_options']['random'] = 'Zufallsbild';
