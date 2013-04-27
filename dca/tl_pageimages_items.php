@@ -115,7 +115,9 @@ $GLOBALS['TL_DCA']['tl_pageimages_items'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_pageimages_items']['pages'],
 			'exclude'                 => true,
 			'inputType'               => 'pageTree',
-			'eval'                    => array('mandatory'=>true, 'fieldType'=>'checkbox'),
+			'eval'                    => array('multiple'=>true, 'fieldType'=>'checkbox', 'mandatory'=>true, 'tl_class'=>'clr'),
+			'sql'                     => "blob NULL",
+			'relation'                => array('type'=>'hasMany', 'load'=>'lazy'),
 			'load_callback'			  => array
 			(
 				array('tl_pageimages_items', 'loadItemPages'),
@@ -123,8 +125,7 @@ $GLOBALS['TL_DCA']['tl_pageimages_items'] = array
 			'save_callback'			  => array
 			(
 				array('tl_pageimages_items', 'saveItemPages'),
-			),
-			'sql'                     => "blob NULL"
+			)
 		),
 		'alt' => array
 		(
