@@ -294,9 +294,7 @@ class tl_pageimages_items extends Backend {
 <param name="wmode" value="transparent" />
 </object>';
         }
-		elseif($objFile->isGdImage)
-		{
-			if ($GLOBALS['TL_CONFIG']['thumbnails'] && $objFile->height <= 3000 && $objFile->width <= 3000)
+			if ($GLOBALS['TL_CONFIG']['thumbnails'] && $objFile->height <= 3000 && $objFile->width <= 3000 && $objFile->height)
 			{
 				$maxWidth = $width > 0 ? $width : 40;
 				$maxHeight = $height > 0 ? $height : 40;
@@ -306,7 +304,10 @@ class tl_pageimages_items extends Backend {
 				$image = $this->getImage($objFile->value, $_width, $_height);
 			}
 			
-            return '<img src="'.$image.'" alt="" style="margin-top: 6px;" />';
+			if ($image)
+			{
+				return '<img src="'.$image.'" alt="" style="margin-top: 6px;" />';
+			}
         }
 		
 		return null;
