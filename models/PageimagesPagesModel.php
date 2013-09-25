@@ -36,11 +36,12 @@ class PageimagesPagesModel extends \Model
 
 
 	/**
-	 * Find published news items by their parent ID and ID or alias
+	 * Find published items by their ID and pageimages ID
 	 * 
-	 * @param mixed $varId   The numeric ID or alias name
+	 * @param int $varId   		The numeric ID
+	 * @param int $pageimagesPi	The numeric pageimages ID
 	 * 
-	 * @return \Model|null The NewsModel or null if there are no news
+	 * @return \Model|null The PageimagesPagesModel or null if there are no items
 	 */
 	public static function findParentAndItemsById($varId, $pageimagesPid)
 	{
