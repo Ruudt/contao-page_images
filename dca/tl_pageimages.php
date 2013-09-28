@@ -145,7 +145,7 @@ $GLOBALS['TL_DCA']['tl_pageimages'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_pageimages']['multiSRC'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('multiple'=>true, 'fieldType'=>'checkbox', 'files'=>true, 'mandatory'=>true, 'extensions'=>'jpg,jpeg,gif,png,swf'),
+			'eval'                    => array('fieldType'=>'checkbox', 'files'=>true, 'extensions'=>'jpg,jpeg,gif,png,swf'),
 			'sql'                     => "blob NULL"
 		),
 	)
