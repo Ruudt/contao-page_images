@@ -294,6 +294,8 @@ class tl_pageimages_items extends Backend {
 <param name="wmode" value="transparent" />
 </object>';
         }
+		elseif($objFile->isGdImage)
+		{
 			if ($GLOBALS['TL_CONFIG']['thumbnails'] && $objFile->height <= 3000 && $objFile->width <= 3000 && $objFile->height)
 			{
 				$maxWidth = $width > 0 ? $width : 40;
