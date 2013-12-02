@@ -205,19 +205,38 @@ class tl_pageimages_items extends Backend {
 			return '';
 		}
 
-		// Check for version 3 format
-		if (!is_numeric($multiSRC[0]))
-		{
-			return '<p class="error">'.$GLOBALS['TL_LANG']['ERR']['version2format'].'</p>';
-		}
+        // Support all Contao 3 versions
+        if (version_compare(VERSION . '.' . BUILD, '3.2', '<'))
+        {
+            // Check for version 3 format
+            if (!is_numeric($multiSRC[0]))
+            {
+                return '<p class="error">'.$GLOBALS['TL_LANG']['ERR']['version2format'].'</p>';
+            }
 
-		// Get the file entries from the database
-		$objFiles = \FilesModel::findMultipleByIds($multiSRC);
+            // Get the file entries from the database
+            $objFiles = \FilesModel::findMultipleByIds($multiSRC);
 
-		if ($objFiles === null)
-		{
-			return '';
-		}
+            if ($objFiles === null)
+            {
+                return '';
+            }
+        }
+        else
+        {
+            // Get the file entries from the database
+            $objFiles = \FilesModel::findMultipleByUuids($multiSRC);
+
+            if ($objFiles === null)
+            {
+                if (!\Validator::isUuid($multiSRC[0]))
+                {
+                    return '<p class="error">'.$GLOBALS['TL_LANG']['ERR']['version2format'].'</p>';
+                }
+
+                return '';
+            }
+        }
 
 		// Get all images
 		while ($objFiles->next())
