@@ -43,13 +43,11 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['pageimages_layout'] = array
 $GLOBALS['TL_DCA']['tl_module']['fields']['pageimages_type'] = array
 (
 	'label'						=> &$GLOBALS['TL_LANG']['tl_module']['pageimages_type'],
-	'default'					=> 'random',
+	'default'					=> '1',
 	'exclude'					=> true,
-	'inputType'					=> 'select',
-	'options'					=> array('random', 'all'),
-	'reference'					=> &$GLOBALS['TL_LANG']['tl_module']['pageimages_type_options'],
-	'eval'						=> array('tl_class'=>'w50'),
-	'sql'						=> "varchar(64) NOT NULL default 'random'"
+	'inputType'					=> 'text',
+	'eval'						=> array('tl_class'=>'w50', 'rgxp'=>'digit'),
+	'sql'						=> "varchar(6) NOT NULL default '1'"
 );
 
 
