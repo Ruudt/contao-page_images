@@ -117,7 +117,6 @@ $GLOBALS['TL_DCA']['tl_pageimages_items'] = array
 			'inputType'               => 'pageTree',
 			'eval'                    => array('multiple'=>true, 'fieldType'=>'checkbox', 'mandatory'=>true, 'tl_class'=>'clr'),
 			'sql'                     => "blob NULL",
-			'relation'                => array('type'=>'hasMany', 'load'=>'lazy'),
 			'load_callback'			  => array
 			(
 				array('tl_pageimages_items', 'loadItemPages'),
