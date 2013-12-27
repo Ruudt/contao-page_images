@@ -115,8 +115,7 @@ $GLOBALS['TL_DCA']['tl_pageimages_pages'] = array
 			'exclude'                 => true,
 			'inputType'               => 'pageTree',
 			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio'),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'",
-			'relation'                => array('type'=>'hasOne', 'load'=>'eager')
+			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 	)
 );
