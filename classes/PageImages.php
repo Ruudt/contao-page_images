@@ -172,29 +172,14 @@ abstract class PageImages extends \Module
             {
                 return '<p class="error">'.$GLOBALS['TL_LANG']['ERR']['version2format'].'</p>';
             }
-
-            // Get the file entries from the database
-            $objFiles = \FilesModel::findMultipleByIds($multiSRC);
-
-            if ($objFiles === null)
-            {
-                return '';
-            }
         }
-        else
+
+        // Get the file entries from the database
+        $objFiles = \FilesModel::findMultipleByIds($multiSRC);
+
+        if ($objFiles === null)
         {
-            // Get the file entries from the database
-            $objFiles = \FilesModel::findMultipleByUuids($multiSRC);
-
-            if ($objFiles === null)
-            {
-                if (!\Validator::isUuid($multiSRC[0]))
-                {
-                    return '<p class="error">'.$GLOBALS['TL_LANG']['ERR']['version2format'].'</p>';
-                }
-
-                return '';
-            }
+            return '';
         }
 
         // Get all images
