@@ -213,7 +213,7 @@ abstract class PageImages extends \Module
                 $images[$objFiles->path] = array
                 (
                     'id'        => $objFiles->id,
-					'uuid'      => $objFile->uuid,
+                    'uuid'      => $objFile->uuid,
                     'name'      => $objFile->basename,
                     'singleSRC' => $objFiles->path,
                     'alt'       => $arrMeta['title'],
@@ -225,7 +225,7 @@ abstract class PageImages extends \Module
             // Folders
             else
             {
-                $objSubfiles = \FilesModel::findByPid($objFiles->uuid);
+                $objSubfiles = \FilesModel::findByPid(isset($objFiles->uuid) ? $objFiles->uuid : $objFiles->id);
 
                 if ($objSubfiles === null)
                 {
@@ -259,7 +259,7 @@ abstract class PageImages extends \Module
                     $images[$objSubfiles->path] = array
                     (
                         'id'        => $objSubfiles->id,
-						'uuid'      => $objSubfiles->uuid,
+                        'uuid'      => $objSubfiles->uuid,
                         'name'      => $objFile->basename,
                         'singleSRC' => $objSubfiles->path,
                         'alt'       => $arrMeta['title'],
