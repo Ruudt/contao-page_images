@@ -336,7 +336,7 @@ abstract class PageImages extends \Module
             $this->addImageToTemplate($objTemplate, $arrItem);
         }
 
-$objTemplate->alldata = $arrItem['data']; 
+        $objTemplate->row = $arrItem['data']; 
 
         return $objTemplate->parse();
     }
