@@ -1,13 +1,8 @@
 <?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
- *
- * @package		PageImages
  * @author		Ruud Walraven <ruud.walraven@gmail.com>
  * @copyright	Ruud Walraven 2011 - 2012
- * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
 
@@ -87,7 +82,6 @@ $GLOBALS['TL_DCA']['tl_pageimages_items'] = array
 	// Palettes
 	'palettes' => array
 	(
-			//'__selector__'		      => array('multiSRC','pages'),
 			'default'			      => '{settings},multiSRC,pages,alt,noInheritance'
 	),
 
@@ -160,7 +154,6 @@ class tl_pageimages_items extends Backend {
      * label_callback that shows the pagenames the setting applies to
      */
     function showLabel($row) {
-        // Import database class
         $this->import('Database');
 
         // Get page names
@@ -290,7 +283,6 @@ class tl_pageimages_items extends Backend {
 		$objImage = new File($images[$i]);
 
 		return array($this->getImageHTML($objImage, $width=150, $height=75), $arrImages);
-
 	}
 
 

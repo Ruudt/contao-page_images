@@ -1,17 +1,6 @@
 <?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
- *
- * @package     PageImages
- * @author      Ruud Walraven <ruud.walraven@gmail.com>
- * @copyright   Ruud Walraven 2011 - 2013
- * @license     http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- */
-
-
-/**
  * Run in a custom namespace, so the class can be replaced
  */
 namespace PageImages;
@@ -59,7 +48,6 @@ abstract class PageImages extends \Module
 
                 case 'all':
                     $count = 0;
-
                     // no break here
 
                 case '0':
@@ -103,13 +91,12 @@ abstract class PageImages extends \Module
                     {
                         foreach ($pageImages as $key => $pageImage)
                         {
-                            $pageImages[$key]['multiSRC']        = $multiSRC;
-                            $pageImages[$key]['pageId']            = $objPageItem->pageId;
-                            $pageImages[$key]['noInheritance']    = $objPageItem->noInheritance;
-                            $pageImages[$key]['alt']            = $objPageItem->alt ? $objPageItem->alt : $pageImages[$key]['alt'];
-                            $pageImages[$key]['data']            = $objPageItem->row(); // Thanks to JSk
+                            $pageImages[$key]['multiSRC']      = $multiSRC;
+                            $pageImages[$key]['pageId']        = $objPageItem->pageId;
+                            $pageImages[$key]['noInheritance'] = $objPageItem->noInheritance;
+                            $pageImages[$key]['alt']           = $objPageItem->alt ? $objPageItem->alt : $pageImages[$key]['alt'];
+                            $pageImages[$key]['data']          = $objPageItem->row(); // Thanks to JSk
                         }
-                        
                     }
                 }
 
@@ -136,13 +123,12 @@ abstract class PageImages extends \Module
         {
             foreach ($pageImages as $key => $pageImage)
             {
-                $pageImages[$key]['multiSRC']        = $multiSRC;
+                $pageImages[$key]['multiSRC']      = $multiSRC;
                 $pageImages[$key]['pageId']        = 0;
-                $pageImages[$key]['noInheritance']    = 0;
-                $pageImages[$key]['alt']            = $this->objSet->alt ? $this->objSet->alt : $pageImages[$key]['alt'];
-                $pageImages[$key]['data']            = $this->objSet->row(); // Thanks to JSk
+                $pageImages[$key]['noInheritance'] = 0;
+                $pageImages[$key]['alt']           = $this->objSet->alt ? $this->objSet->alt : $pageImages[$key]['alt'];
+                $pageImages[$key]['data']          = $this->objSet->row(); // Thanks to JSk
             }
-            
         }
 
         return $pageImages;
@@ -297,30 +283,10 @@ abstract class PageImages extends \Module
         }
         
         return $images;
-        
-        $i = mt_rand(0, (count($images)-1));
-
-        $arrImage = $images[$i];
-        $arrImage['size'] = $this->imgSize;
-
-        if (!$this->useCaption)
-        {
-            $arrImage['caption'] = null;
-        }
-        elseif ($arrImage['caption'] == '')
-        {
-            $arrImage['caption'] = $arrImage['title'];
-        }
-
-        return $arrImage;
     }
 
     /**
      * Returns The image HTML
-     * @param $img Image source
-     * @param $width Image width
-     * @param $height Image height
-     * @return string
      */
     protected function getImageHTML($arrItem)
     {

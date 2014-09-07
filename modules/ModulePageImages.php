@@ -1,17 +1,6 @@
 <?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
- *
- * @package     PageImages
- * @author      Ruud Walraven <ruud.walraven@gmail.com>
- * @copyright   Ruud Walraven 2011 - 2013
- * @license     http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- */
-
-
-/**
  * Run in a custom namespace, so the class can be replaced
  */
 namespace PageImages;
@@ -20,20 +9,19 @@ namespace PageImages;
 /**
  * Class ModulePageImages
  *
- * @copyright  Ruud Walraven 2011
+ * @copyright  Ruud Walraven 2011 - 2012
  * @author     Ruud Walraven <ruud.walraven@gmail.com>
  */
 class ModulePageImages extends \PageImages
 {
     /**
      * Template
-     * @var string
      */
     protected $strTemplate = 'mod_pageimages';
 
     
     /**
-     * Generate module
+     * Compile module
      */
     protected function compile()
     {
