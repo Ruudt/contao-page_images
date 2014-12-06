@@ -11,6 +11,7 @@ $GLOBALS['TL_LANG']['tl_pageimages']['alt'] = array('Alternate text', 'An access
 $GLOBALS['TL_LANG']['tl_pageimages']['multiSRC'] = array('Default image(s)', 'Please select one or more images or folders from the files directory. If you select more then one image, one of the images will display at random. If you select a folder, its images will be included automatically.');
 
 $GLOBALS['TL_LANG']['tl_pageimages']['new'] = array('New page image category', 'New page image category');
+$GLOBALS['TL_LANG']['tl_pageimages']['editHeader'] = array('Edit page image category settings', 'Edit page image category settings');
 $GLOBALS['TL_LANG']['tl_pageimages']['edit'] = array('Edit page image category', 'Edit page image category');
 $GLOBALS['TL_LANG']['tl_pageimages']['copy'] = array('Copy page image category', 'Copy page image category');
 $GLOBALS['TL_LANG']['tl_pageimages']['delete'] = array('Delete page image category', 'Delete page image category');

@@ -64,6 +64,13 @@ $GLOBALS['TL_DCA']['tl_pageimages'] = array
 				'href'                => 'table=tl_pageimages_items',
 				'icon'                => 'edit.gif'
 			),
+            'editheader' => array
+            (
+                'label'               => &$GLOBALS['TL_LANG']['tl_pageimages']['editheader'],
+                'href'                => 'act=edit',
+                'icon'                => 'header.gif',
+                'button_callback'     => array('tl_pageimages', 'editHeader')
+            ),
 			'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_pageimages']['copy'],
@@ -295,4 +302,13 @@ class tl_pageimages extends Backend
 	{
 		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'pageimages_categoriesp')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : $this->generateImage(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
 	}
+
+
+    /**
+     * Return the edit header button
+     */
+    public function editHeader($row, $href, $label, $title, $icon, $attributes)
+    {
+        return $this->User->canEditFieldsOf('tl_pageimages') ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ' : Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
+    }
 }
