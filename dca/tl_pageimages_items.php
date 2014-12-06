@@ -6,7 +6,7 @@
  *
  * @package		PageImages
  * @author		Ruud Walraven <ruud.walraven@gmail.com>
- * @copyright	Ruud Walraven 2011 - 2012
+ * @copyright           Ruud Walraven 2011 - 2014
  * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
@@ -203,38 +203,13 @@ class tl_pageimages_items extends Backend {
 			return '';
 		}
 
-        // Support all Contao 3 versions
-        if (version_compare(VERSION . '.' . BUILD, '3.2', '<'))
-        {
-            // Check for version 3 format
-            if (!is_numeric($multiSRC[0]))
-            {
-                return '<p class="error">'.$GLOBALS['TL_LANG']['ERR']['version2format'].'</p>';
-            }
-
-            // Get the file entries from the database
-            $objFiles = \FilesModel::findMultipleByIds($multiSRC);
-
-            if ($objFiles === null)
-            {
-                return '';
-            }
-        }
-        else
-        {
             // Get the file entries from the database
             $objFiles = \FilesModel::findMultipleByUuids($multiSRC);
 
             if ($objFiles === null)
             {
-                if (!\Validator::isUuid($multiSRC[0]))
-                {
-                    return '<p class="error">'.$GLOBALS['TL_LANG']['ERR']['version2format'].'</p>';
-                }
-
                 return '';
             }
-        }
 
 		// Get all images
 		while ($objFiles->next())
@@ -291,35 +266,6 @@ class tl_pageimages_items extends Backend {
 		return array($this->getImageHTML($objImage, $width=150, $height=75), $arrImages);
 
 	}
-
-
-	/**
-	 * Dynamically add flags to the "multiSRC" field
-	 * @param mixed
-	 * @param \DataContainer
-	 * @return mixed
-	 */
-	public function setMultiSrcFlags($varValue, DataContainer $dc)
-	{
-		if ($dc->activeRecord)
-		{
-			switch ($dc->activeRecord->type)
-			{
-				case 'gallery':
-					$GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['isGallery'] = true;
-					$GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['extensions'] = Config::get('validImageTypes');
-					break;
-
-				case 'downloads':
-					$GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['isDownloads'] = true;
-					$GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['extensions'] = Config::get('allowedDownload');
-					break;
-			}
-		}
-
-		return $varValue;
-	}
-
 
 	/**
 	 * Returns the HTML for the file provided
