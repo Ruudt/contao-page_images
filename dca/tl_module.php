@@ -1,13 +1,8 @@
 <?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
- *
  * @copyright  Ruud Walraven 2011
  * @author     Ruud Walraven <ruud.walraven@gmail.com>
- * @package    PageImages
- * @license    GPL
  */
 
 
@@ -51,11 +46,12 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['pageimages_type'] = array
 );
 
 
+/**
+ * Provide miscellaneous methods that are used by the data configuration array.
+ */
 class tl_module_pageimages extends Backend {
 	/**
 	 * Return pageimages templates as array
-	 * @param object
-	 * @return array
 	 */
 	public function getPageimagesTemplates(DataContainer $dc)
 	{

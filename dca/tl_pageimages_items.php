@@ -1,13 +1,8 @@
 <?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
- *
- * @package		PageImages
  * @author		Ruud Walraven <ruud.walraven@gmail.com>
- * @copyright           Ruud Walraven 2011 - 2014
- * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @copyright	Ruud Walraven 2011 - 2014
  */
 
 
@@ -138,7 +133,7 @@ $GLOBALS['TL_DCA']['tl_pageimages_items'] = array
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
 			'eval'                    => array('multiple'=>true, 'fieldType'=>'checkbox', 'files'=>true, 'mandatory'=>true, 'extensions'=>Config::get('validImageTypes'), 'isGallery'=>true),
-			'sql'                     => "blob NULL",
+			'sql'                     => "blob NULL"
 		),
 		'noInheritance' => array
 		(
@@ -159,7 +154,6 @@ class tl_pageimages_items extends Backend {
      * label_callback that shows the pagenames the setting applies to
      */
     function showLabel($row) {
-        // Import database class
         $this->import('Database');
 
         // Get page names

@@ -1,16 +1,9 @@
 <?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
- * 
- * @package		PageImages
  * @author		Ruud Walraven <ruud.walraven@gmail.com>
  * @copyright	Ruud Walraven 2011 - 2012
- * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
-
-$GLOBALS['TL_LANG']['tl_pageimages_items']['settings'] = 'Instellingen';
 
 $GLOBALS['TL_LANG']['tl_pageimages_items']['new'] = array('Nieuwe pagina afbeelding', 'Voeg nieuwe pagina afbeelding(en) toe.');
 $GLOBALS['TL_LANG']['tl_pageimages_items']['edit'] = array('Pagina afbeelding aanpassen', 'Pagina afbeelding aanpassen.');
@@ -24,3 +17,6 @@ $GLOBALS['TL_LANG']['tl_pageimages_items']['noInheritance'] = array('Stop pagina
 
 $GLOBALS['TL_LANG']['tl_pageimages_items']['example'] = 'Voorbeeld';
 $GLOBALS['TL_LANG']['tl_pageimages_items']['random_thumbnails'] = 'Bestanden gebruikt voor willekeurige weergave';
+
+$GLOBALS['TL_LANG']['tl_pageimages']['settings'] = 'Instellingen';
+$GLOBALS['TL_LANG']['tl_pageimages']['source_legend'] = 'Bestanden en mappen';

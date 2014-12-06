@@ -1,16 +1,10 @@
 <?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2010 Leo Feyer
- * 
- * @package		PageImages
  * @author		Ruud Walraven <ruud.walraven@gmail.com>
  * @copyright	Ruud Walraven 2011 - 2012
- * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
-$GLOBALS['TL_LANG']['tl_pageimages_items']['settings'] = 'Settings';
 
 $GLOBALS['TL_LANG']['tl_pageimages_items']['new'] = array('Add page image(s)', 'Add new page image(s) to pages.');
 $GLOBALS['TL_LANG']['tl_pageimages_items']['edit'] = array('Edit page image', 'Edit page image');
@@ -24,3 +18,6 @@ $GLOBALS['TL_LANG']['tl_pageimages_items']['noInheritance'] = array('Prevent pag
 
 $GLOBALS['TL_LANG']['tl_pageimages_items']['example'] = 'Example';
 $GLOBALS['TL_LANG']['tl_pageimages_items']['random_thumbnails'] = 'Files used for random display';
+
+$GLOBALS['TL_LANG']['tl_pageimages_items']['settings'] = 'Settings';
+$GLOBALS['TL_LANG']['tl_pageimages_items']['source_legend'] = 'Files and folders';
