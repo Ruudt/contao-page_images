@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2013 Leo Feyer
+ * Copyright (c) 2005-2014 Leo Feyer
  *
  * @package Pageimages
  * @link    https://contao.org
@@ -29,6 +29,7 @@ ClassLoader::addClasses(array
 	'PageImages\PageImages'           => 'system/modules/pageimages/classes/PageImages.php',
 
 	// Models
+	'PageImages\PageimagesItemsModel' => 'system/modules/pageimages/models/PageimagesItemsModel.php',
 	'PageImages\PageimagesModel'      => 'system/modules/pageimages/models/PageimagesModel.php',
 	'PageImages\PageimagesPagesModel' => 'system/modules/pageimages/models/PageimagesPagesModel.php',
 

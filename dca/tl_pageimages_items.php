@@ -1,8 +1,13 @@
 <?php
 
 /**
+ * Contao Open Source CMS
+ * Copyright (C) 2005-2010 Leo Feyer
+ *
+ * @package		PageImages
  * @author		Ruud Walraven <ruud.walraven@gmail.com>
  * @copyright	Ruud Walraven 2011 - 2012
+ * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
 
@@ -82,7 +87,7 @@ $GLOBALS['TL_DCA']['tl_pageimages_items'] = array
 	// Palettes
 	'palettes' => array
 	(
-			'default'			      => '{settings},multiSRC,pages,alt,noInheritance'
+			'default'			      => '{source_legend},multiSRC;{settings},pages,alt,noInheritance'
 	),
 
 	// Fields
@@ -132,8 +137,8 @@ $GLOBALS['TL_DCA']['tl_pageimages_items'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_pageimages_items']['multiSRC'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('multiple'=>true, 'fieldType'=>'checkbox', 'files'=>true, 'mandatory'=>true, 'extensions'=>'jpg,jpeg,gif,png,swf', 'isGallery'=>true),
-			'sql'                     => "blob NULL"
+			'eval'                    => array('multiple'=>true, 'fieldType'=>'checkbox', 'files'=>true, 'mandatory'=>true, 'extensions'=>Config::get('validImageTypes'), 'isGallery'=>true),
+			'sql'                     => "blob NULL",
 		),
 		'noInheritance' => array
 		(
@@ -154,6 +159,7 @@ class tl_pageimages_items extends Backend {
      * label_callback that shows the pagenames the setting applies to
      */
     function showLabel($row) {
+        // Import database class
         $this->import('Database');
 
         // Get page names
@@ -283,6 +289,35 @@ class tl_pageimages_items extends Backend {
 		$objImage = new File($images[$i]);
 
 		return array($this->getImageHTML($objImage, $width=150, $height=75), $arrImages);
+
+	}
+
+
+	/**
+	 * Dynamically add flags to the "multiSRC" field
+	 * @param mixed
+	 * @param \DataContainer
+	 * @return mixed
+	 */
+	public function setMultiSrcFlags($varValue, DataContainer $dc)
+	{
+		if ($dc->activeRecord)
+		{
+			switch ($dc->activeRecord->type)
+			{
+				case 'gallery':
+					$GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['isGallery'] = true;
+					$GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['extensions'] = Config::get('validImageTypes');
+					break;
+
+				case 'downloads':
+					$GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['isDownloads'] = true;
+					$GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['extensions'] = Config::get('allowedDownload');
+					break;
+			}
+		}
+
+		return $varValue;
 	}
 
 

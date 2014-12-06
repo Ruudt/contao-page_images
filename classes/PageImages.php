@@ -1,6 +1,17 @@
 <?php
 
 /**
+ * Contao Open Source CMS
+ * Copyright (C) 2005-2010 Leo Feyer
+ *
+ * @package     PageImages
+ * @author      Ruud Walraven <ruud.walraven@gmail.com>
+ * @copyright   Ruud Walraven 2011 - 2013
+ * @license     http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ */
+
+
+/**
  * Run in a custom namespace, so the class can be replaced
  */
 namespace PageImages;
@@ -48,6 +59,7 @@ abstract class PageImages extends \Module
 
                 case 'all':
                     $count = 0;
+
                     // no break here
 
                 case '0':
@@ -84,8 +96,8 @@ abstract class PageImages extends \Module
 
                 // Get a random image
                 $multiSRC = deserialize($objPageItem->multiSRC);
-                
-                if (is_array($multiSRC) && count($multiSRC))
+
+                if (is_array($multiSRC) && !empty($multiSRC))
                 {
                     if ($pageImages = $this->getImages($multiSRC))
                     {
@@ -129,6 +141,7 @@ abstract class PageImages extends \Module
                 $pageImages[$key]['alt']           = $this->objSet->alt ? $this->objSet->alt : $pageImages[$key]['alt'];
                 $pageImages[$key]['data']          = $this->objSet->row(); // Thanks to JSk
             }
+            
         }
 
         return $pageImages;
@@ -150,23 +163,8 @@ abstract class PageImages extends \Module
             return '';
         }
 
-        // Support all Contao 3 versions
-        if (version_compare(VERSION . '.' . BUILD, '3.2', '<'))
-        {
-            // Check for version 3 format
-            if (!is_numeric($multiSRC[0]))
-            {
-                return '<p class="error">'.$GLOBALS['TL_LANG']['ERR']['version2format'].'</p>';
-            }
-
-            // Get the file entries from the database
-            $objFiles = \FilesModel::findMultipleByIds($multiSRC);
-        }
-        else
-        {
-            // Get the file entries from the database
-            $objFiles = \FilesModel::findMultipleByUuids($multiSRC);
-        }
+        // Get the file entries from the database
+        $objFiles = \FilesModel::findMultipleByUuids($multiSRC);
 
         if ($objFiles === null)
         {
@@ -283,10 +281,30 @@ abstract class PageImages extends \Module
         }
         
         return $images;
+        
+        $i = mt_rand(0, (count($images)-1));
+
+        $arrImage = $images[$i];
+        $arrImage['size'] = $this->imgSize;
+
+        if (!$this->useCaption)
+        {
+            $arrImage['caption'] = null;
+        }
+        elseif ($arrImage['caption'] == '')
+        {
+            $arrImage['caption'] = $arrImage['title'];
+        }
+
+        return $arrImage;
     }
 
     /**
      * Returns The image HTML
+     * @param $img Image source
+     * @param $width Image width
+     * @param $height Image height
+     * @return string
      */
     protected function getImageHTML($arrItem)
     {
@@ -301,8 +319,6 @@ abstract class PageImages extends \Module
             $objTemplate = new \FrontendTemplate('pageimagesimage');
             $this->addImageToTemplate($objTemplate, $arrItem);
         }
-
-        $objTemplate->row = $arrItem['data']; 
 
         return $objTemplate->parse();
     }

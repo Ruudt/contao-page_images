@@ -1,8 +1,13 @@
 <?php
 
 /**
+ * Contao Open Source CMS
+ * Copyright (C) 2005-2010 Leo Feyer
+ *
+ * @package		PageImages
  * @author		Ruud Walraven <ruud.walraven@gmail.com>
  * @copyright	Ruud Walraven 2011 - 2012
+ * @license		http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
 /**
@@ -92,7 +97,7 @@ $GLOBALS['TL_DCA']['tl_pageimages'] = array
 	'palettes' => array
 	(
 		'__selector__'	=>	array('name'),
-		'default'       => 'name,size,multiSRC,alt'
+		'default'       => 'name;{source_legend},multiSRC;{image_legend},alt,size'
 	),
 
 	// Fields
@@ -130,25 +135,25 @@ $GLOBALS['TL_DCA']['tl_pageimages'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_pageimages']['size'],
 			'exclude'                 => true,
 			'inputType'               => 'imageSize',
-			'options'                 => $GLOBALS['TL_CROP'],
-			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-			'eval'                    => array('rgxp'=>'digit', 'nospace'=>true),
-			'sql'                     => "varchar(64) NOT NULL default ''"
-		),
+            'options'                 => System::getImageSizes(),
+            'reference'               => &$GLOBALS['TL_LANG']['MSC'],
+            'eval'                    => array('rgxp'=>'natural', 'includeBlankOption'=>true, 'nospace'=>true, 'tl_class'=>'w50'),
+            'sql'                     => "varchar(64) NOT NULL default ''"
+        ),
 		'multiSRC' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_pageimages']['multiSRC'],
-			'exclude'                 => true,
-			'inputType'               => 'fileTree',
-			'eval'                    => array('multiple'=>true, 'fieldType'=>'checkbox', 'files'=>true, 'extensions'=>'jpg,jpeg,gif,png,swf', 'isGallery'=>true),
-			'sql'                     => "blob NULL"
-		),
+        (
+            'label'                   => &$GLOBALS['TL_LANG']['tl_pageimages']['multiSRC'],
+            'exclude'                 => true,
+            'inputType'               => 'fileTree',
+            'eval'                    => array('multiple'=>true, 'fieldType'=>'checkbox', 'files'=>true, 'extensions'=>Config::get('validImageTypes'), 'isGallery'=>true),
+            'sql'                     => "blob NULL"
+        )
 	)
 );
 
 
 /**
- * Provide miscellaneous methods that are used by the data configuration array.
+ * tl_pageimages class.
  */
 class tl_pageimages extends Backend
 {
