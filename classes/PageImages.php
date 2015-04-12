@@ -79,33 +79,45 @@ abstract class PageImages extends \Module
 
         if ($objPageItem !== null)
         {
-            if (!$inheriting || !$objPageItem->noInheritance)
+            $pageImages = array();
+
+            while( $objPageItem->next() )
             {
-                $hasPageImage = false;
+                if ($inheriting && $objPageItem->noInheritance)
+                {
+                    continue;
+                }
 
                 // Get a random image
                 $multiSRC = deserialize($objPageItem->multiSRC);
 
                 if (is_array($multiSRC) && !empty($multiSRC))
                 {
-                    if ($pageImages = $this->getImages($multiSRC))
+                    if (!$tmpPageImages = $this->getImages($multiSRC))
                     {
-                        foreach ($pageImages as $key => $pageImage)
-                        {
-                            $pageImages[$key]['multiSRC']      = $multiSRC;
-                            $pageImages[$key]['pageId']        = $objPageItem->pageId;
-                            $pageImages[$key]['noInheritance'] = $objPageItem->noInheritance;
-                            $pageImages[$key]['alt']           = $objPageItem->alt ? $objPageItem->alt : $pageImages[$key]['alt'];
-                            $pageImages[$key]['data']          = $objPageItem->row(); // Thanks to JSk
-                        }
+                        continue;
                     }
-                }
 
-                if ($pageImages)
-                {
-                    // Return image when found
-                    return $pageImages;
+                    foreach ($tmpPageImages as $key => $tmp)
+                    {
+                        $tmpPageImages[$key]['multiSRC']      = $multiSRC; // Will be removed in future version (deprecated)
+                        $tmpPageImages[$key]['uuid']          = $tmpPageImages[$key]['uuid'] ?: $multiSRC[$key];
+                        $tmpPageImages[$key]['pageId']        = $objPageItem->pageId;
+                        $tmpPageImages[$key]['noInheritance'] = $objPageItem->noInheritance;
+                        $tmpPageImages[$key]['alt']           = $objPageItem->alt ? $objPageItem->alt : $tmpPageImage['alt'];
+                        $tmpPageImages[$key]['data']          = $objPageItem->row(); // Thanks to JSK
+                    }
+
+                    $pageImages = array_merge_recursive($pageImages, $tmpPageImages);
+                    // Could add multiSRC here, needs getPageImages to filter out non numeric keys
+                    // $pageImages['multiSRC'] = array_merge($pageImages['multiSRC'], $multiSRC);
                 }
+            }
+
+            if (count($pageImages))
+            {
+                // Return image when found
+                return $pageImages;
             }
         }
         else
@@ -118,24 +130,31 @@ abstract class PageImages extends \Module
                 return $this->findPageImages($objPage->pid, true);
             }
         }
-
+        
         // Get the default image if no specific has been found
-        if ($pageImages = $this->getImages($this->objSet->multiSRC))
+        if ($tmpPageImage = $this->getImages($this->objSet->multiSRC))
         {
-            foreach ($pageImages as $key => $pageImage)
-            {
-                $pageImages[$key]['multiSRC']      = $multiSRC;
-                $pageImages[$key]['pageId']        = 0;
-                $pageImages[$key]['noInheritance'] = 0;
-                $pageImages[$key]['alt']           = $this->objSet->alt ? $this->objSet->alt : $pageImages[$key]['alt'];
-                $pageImages[$key]['data']          = $this->objSet->row(); // Thanks to JSk
-            }
+            $i = 0;
             
+            foreach ($tmpPageImage as $key => $pageImage)
+            {
+                $tmpPageImage['multiSRC']      = $this->objSet->multiSRC; // Will be removed in future versions (deprecated)
+                $tmpPageImage['uuid']          = $tmpPageImage['uuid'] ?: $this->objSet->multiSRC[$key];
+                $tmpPageImage['pageId']        = 0;
+                $tmpPageImage['noInheritance'] = 0;
+                $tmpPageImage['alt']           = $this->objSet->alt ? $this->objSet->alt : $tmpPageImage['alt'];
+                $tmpPageImage['data']          = $this->objSet->row(); // Thanks to JSk
+
+                $pageImages[$i] = $tmpPageImage;
+
+                $i++;
+            }
+
         }
 
         return $pageImages;
     }
-    
+
     /**
      * Returns a random existing image from the multiSRC
      * null if no existing image files in multiSRC
@@ -258,7 +277,7 @@ abstract class PageImages extends \Module
         foreach ($images as $key => $arrImage)
         {
             $images[$key]['size'] = $this->imgSize;
-    
+
             if (!$this->useCaption)
             {
                 $images[$key]['caption'] = null;
@@ -270,7 +289,6 @@ abstract class PageImages extends \Module
         }
         
         return $images;
-        
     }
 
     /**
@@ -326,7 +344,7 @@ abstract class PageImages extends \Module
         $width = $size[0];
         $height = $size[1];
         $mode = $size[2];
-    
+        
         // No resizing required
         if ($imgSize[0] != $width || $imgSize[1] != $height)
         {
@@ -378,7 +396,7 @@ abstract class PageImages extends \Module
             {
                 $intWidth = ceil($imgSize[0] * $height / $imgSize[1]);
             }
-        }        
+        }
 
         $objTemplate->arrSize = array
         (
