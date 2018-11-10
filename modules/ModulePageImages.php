@@ -40,7 +40,7 @@ class ModulePageImages extends \PageImages
             $objTemplate = new \FrontendTemplate($this->pageimages_layout);
             $objTemplate->headline = $this->Template->headline;
             $objTemplate->hl = $this->Template->hl;
-            $objTemplate->style = count($this->Template->style) ? implode(' ', $this->Template->arrStyle) : '';
+            $objTemplate->style = $this->Template->style && count($this->Template->style) ? implode(' ', $this->Template->arrStyle) : '';
             $objTemplate->cssID = strlen($this->Template->cssID[0]) ? ' id="' . $this->cssID[0] . '"' : '';
             $objTemplate->class = trim('ce_' . $this->Template->type . ' ' . $this->Template->cssID[1]);
 
@@ -82,7 +82,7 @@ class ModulePageImages extends \PageImages
             foreach ($GLOBALS['PI_HOOKS']['compilePageImages'] as $callback)
             {
                 $this->import($callback[0]);
-                $this->$callback[0]->$callback[1]($this->Template, $pageImage, $this->objSet);
+                $this->{$callback[0]}->{$callback[1]}($this->Template, $pageImages, $this->objSet);
             }
         }
     }
